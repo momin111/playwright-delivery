@@ -7,3 +7,9 @@ passwordField = data-name "password-input"
 signInButton =  data-name "signIn-button"
 errorPopUpMessage = data-name "authorizationError-popup"
 closeButton = data-name "authorizationError-popup-close-button"
+
+Install the Faker.js library
+by running: npm install @faker-js/faker
+
+Run tests
+npx playwright test
