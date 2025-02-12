@@ -21,7 +21,7 @@ test('Check for error message for login input', async ({ page }) => {
   await  closeButton.click()
   await expect(signInButton).toBeEnabled()
 });
-test.only('Check for error message for password input', async ({ page }) => {
+test('Check for error message for password input', async ({ page }) => {
   const usernameField = page.getByTestId("username-input")
   const passwordField = page.getByTestId("password-input")
   const emptyErrorMessageForUsername = page.getByTestId('username-input-error').first()
