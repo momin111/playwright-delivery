@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
+import {faker} from "@faker-js/faker/locale/ar";
+
+const baseURL = process.env.APP_URL
 
 test.beforeEach(async ({ page }) => {
-  const filePath = "https://fe-delivery.tallinn-learning.ee/signin";
-  await page.goto(filePath);
+  await page.goto(baseURL);
 })
 test('Check for error message for login input', async ({ page }) => {
   const usernameField = page.getByTestId("username-input")
@@ -10,15 +12,16 @@ test('Check for error message for login input', async ({ page }) => {
   const signInButton =  page.getByTestId("signIn-button")
   const errorPopUpMessage = page.getByTestId("authorizationError-popup")
   const closeButton = page.getByTestId("authorizationError-popup-close-button")
-
-  await usernameField.fill("incorrectUsername")
-  await passwordField.fill("incorrectPassword")
+  const usernameFromFaker = faker.internet.username()
+  const passwordFromFaker = faker.internet.password()
+  await usernameField.fill(usernameFromFaker)
+  await passwordField.fill(passwordFromFaker)
   await signInButton.click()
   await expect(errorPopUpMessage).toBeVisible()
   await  closeButton.click()
   await expect(signInButton).toBeEnabled()
 });
-test.only('Check for error message for password input', async ({ page }) => {
+test('Check for error message for password input', async ({ page }) => {
   const usernameField = page.getByTestId("username-input")
   const passwordField = page.getByTestId("password-input")
   const emptyErrorMessageForUsername = page.getByTestId('username-input-error').first()
@@ -27,11 +30,13 @@ test.only('Check for error message for password input', async ({ page }) => {
   const emptyErrorMessageForShortUsername = page.getByText('The field must contain at least of characters: 2')
   const emptyErrorMessageForShortPassword = page.getByText('The field must contain at least of characters: 8')
 
-  await usernameField.fill("t")
+  const shortUsernameFromFaker = faker.internet.username().slice(0, 1);
+  await usernameField.fill(shortUsernameFromFaker)
   await expect(emptyErrorMessageForShortUsername).toBeVisible()
   await usernameField.fill("")
   await expect(emptyErrorMessageForUsername).toBeVisible()
-  await passwordField.fill("pass")
+  const shortPasswordFromFaker = faker.internet.password('3')
+  await passwordField.fill(shortPasswordFromFaker)
   await expect(emptyErrorMessageForShortPassword).toBeVisible()
   await passwordField.fill("")
   await expect(emptyErrorMessageForPassword).toBeVisible()
